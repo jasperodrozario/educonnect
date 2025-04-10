@@ -1,114 +1,91 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandX,
-} from "@tabler/icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { signUpWithEmailAndPassword } from "@/lib/firebaseConfig";
+import { useState } from "react";
 
-export function SignupForm() {
-  const handleSubmit = (e) => {
+export const SignUpForm = () => {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    let message;
+    if (password != password2) {
+      alert("Passwords do not match");
+    }
+    message = await signUpWithEmailAndPassword(email, password);
+    if ("Registration Successful! Try logging in!" === message) {
+      alert(message);
+      router.push("/login");
+    }
+    alert(message);
   };
-  return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-lg bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-        Welcome to EduConnect
-      </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-        Login to EduConnect
-      </p>
-      <form className="my-8" onSubmit={handleSubmit}>
-        <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-          <LabelInputContainer>
-            <Label htmlFor="firstname">First name</Label>
-            <Input id="firstname" placeholder="Tyler" type="text" />
-          </LabelInputContainer>
-          <LabelInputContainer>
-            <Label htmlFor="lastname">Last name</Label>
-            <Input id="lastname" placeholder="Durden" type="text" />
-          </LabelInputContainer>
-        </div>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-8">
-          <Label htmlFor="twitterpassword">Your twitter password</Label>
-          <Input
-            id="twitterpassword"
-            placeholder="••••••••"
-            type="twitterpassword"
-          />
-        </LabelInputContainer>
 
-        <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-          type="submit"
+  return (
+    <div className="flex items-center justify-center">
+      <div className="bg-white rounded-lg p-2 w-full max-w-md dark:bg-neutral-900">
+        <div className="mb-8 flex items-center gap-3">
+          <button
+            onClick={() => router.back()}
+            className="h-10 w-10 rounded-full flex items-center justify-center hover:bg-neutral-300 hover:dark:bg-neutral-800"
+          >
+            <IconArrowLeft size={20} />
+          </button>
+          <h1 className="text-2xl font-bold">Sign Up</h1>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col border p-6 rounded-lg shadow-md"
         >
-          Sign up &rarr;
-          <BottomGradient />
-        </button>
-
-        <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-
-        <div className="flex flex-col space-y-4">
+          <label htmlFor="email" className="mb-2">
+            Email:
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-100 border rounded-lg py-2 px-4 w-full outline-none text-black"
+          />
+          <label htmlFor="password" className="mb-2 mt-4">
+            Password:
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-100 border rounded-lg py-2 px-4 w-full outline-none text-black"
+          />
+          <label htmlFor="password" className="mb-2 mt-4">
+            Retype Password:
+          </label>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            placeholder="Retype your password"
+            required
+            onChange={(e) => setPassword2(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-100 border rounded-lg py-2 px-4 w-full outline-none text-black"
+          />
           <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
             type="submit"
+            className="bg-orange-600 hover:bg-orange-700 font-bold py-2 px-4 rounded-lg mt-6 mb-2 w-full"
           >
-            <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              GitHub
-            </span>
-            <BottomGradient />
+            Sign up
           </button>
-          <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
-            type="submit"
-          >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Google
-            </span>
-            <BottomGradient />
-          </button>
-          <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
-            type="submit"
-          >
-            <IconBrandX className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              X
-            </span>
-            <BottomGradient />
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-}
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-      <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-    </>
-  );
-};
-
-const LabelInputContainer = ({ children, className }) => {
-  return (
-    <div className={cn("flex w-full flex-col space-y-2", className)}>
-      {children}
+        </form>
+      </div>
     </div>
   );
 };

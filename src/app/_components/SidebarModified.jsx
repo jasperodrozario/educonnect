@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/Sidebar";
 import { usePathname } from "next/navigation";
 
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseAuth } from "@/lib/firebaseConfig";
+
 import {
   IconBrandTabler,
   IconSettings,
@@ -16,16 +19,19 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-export function SidebarModified({
-  children,
-  loginStatus = false,
-  animate = true,
-}) {
+export function SidebarModified({ children, animate = true }) {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   // Links that appear without authentication
   const baseLinks = [
+    {
+      label: "Rooms",
+      href: "/",
+      icon: (
+        <IconHome className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
     {
       label: "AI Assistant",
       href: "/ai-chat",
@@ -37,13 +43,6 @@ export function SidebarModified({
 
   // Links that appear only when logged in
   const authenticatedLinks = [
-    {
-      label: "Rooms",
-      href: "/",
-      icon: (
-        <IconHome className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -74,7 +73,6 @@ export function SidebarModified({
     icon: (
       <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
-    onClick: () => setIsLoggedIn(true),
   };
 
   const logoutLink = {
@@ -83,7 +81,7 @@ export function SidebarModified({
     icon: (
       <IconLogin className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
-    onClick: () => setIsLoggedIn(loginStatus),
+    onClick: () => setIsLoggedIn(false),
   };
 
   // Combine links based on authentication state
