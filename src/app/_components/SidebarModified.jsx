@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/Sidebar";
 import { usePathname } from "next/navigation";
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { firebaseAuth } from "@/lib/firebaseConfig";
+import { useAuth } from "@/app/context/AuthContext";
+import { logout } from "@/firebase/authService";
 
 import {
   IconBrandTabler,
@@ -21,7 +21,13 @@ import { cn } from "@/lib/utils";
 
 export function SidebarModified({ children, animate = true }) {
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [open, setOpen] = useState(false);
+
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
 
   // Links that appear without authentication
   const baseLinks = [
@@ -81,16 +87,20 @@ export function SidebarModified({ children, animate = true }) {
     icon: (
       <IconLogin className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
-    onClick: () => setIsLoggedIn(false),
+    onClick: () => {
+      if (!logout()) {
+        alert(error.code);
+      }
+    },
   };
 
   // Combine links based on authentication state
   const links = [
     ...baseLinks,
-    ...(isLoggedIn ? authenticatedLinks : []),
-    isLoggedIn ? logoutLink : loginLink,
+    ...(user ? authenticatedLinks : []),
+    user ? logoutLink : loginLink,
   ];
-  const [open, setOpen] = useState(false);
+
   return (
     <div
       className={cn(
@@ -118,7 +128,7 @@ export function SidebarModified({ children, animate = true }) {
             </div>
           </div>
           <div>
-            {isLoggedIn ? (
+            {user ? (
               <SidebarLink
                 link={{
                   label: "John Doe",

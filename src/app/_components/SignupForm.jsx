@@ -1,7 +1,7 @@
 "use client";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { signUpWithEmailAndPassword } from "@/lib/firebaseConfig";
+import { signUpWithEmailAndPassword } from "@/firebase/authService";
 import { useState } from "react";
 
 export const SignUpForm = () => {
@@ -10,24 +10,39 @@ export const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [feedback, setFeedback] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    let message;
-    if (password != password2) {
-      alert("Passwords do not match");
+    if (!email || !password || !password2) {
+      setFeedback("Please fill in all fields");
+    } else if (password != password2) {
+      setFeedback("Retyped password doesn't match");
+    } else {
+      const { user, error } = await signUpWithEmailAndPassword(email, password);
+      if (user) {
+        router.push("/");
+      } else if (error) {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            setFeedback("This email is already in use.");
+            break;
+          case "auth/invalid-email":
+            setFeedback("Invalid email format.");
+            break;
+          case "auth/weak-password":
+            setFeedback("Password should be at least 6 characters.");
+            break;
+          default:
+            setFeedback("Signup failed. Please try again.");
+        }
+      }
     }
-    message = await signUpWithEmailAndPassword(email, password);
-    if ("Registration Successful! Try logging in!" === message) {
-      alert(message);
-      router.push("/login");
-    }
-    alert(message);
   };
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white rounded-lg p-2 w-full max-w-md dark:bg-neutral-900">
+      <div className="bg-white rounded-lg p-2 pb-6 w-full max-w-md dark:bg-neutral-900">
         <div className="mb-8 flex items-center gap-3">
           <button
             onClick={() => router.back()}
@@ -35,11 +50,11 @@ export const SignUpForm = () => {
           >
             <IconArrowLeft size={20} />
           </button>
-          <h1 className="text-2xl font-bold">Sign Up</h1>
+          <h1 className="text-2xl font-bold">Sign up</h1>
         </div>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSignup}
           className="flex flex-col border p-6 rounded-lg shadow-md"
         >
           <label htmlFor="email" className="mb-2">
@@ -84,6 +99,7 @@ export const SignUpForm = () => {
           >
             Sign up
           </button>
+          {feedback && <p className="mt-4 text-red-500">{feedback}</p>}
         </form>
       </div>
     </div>
