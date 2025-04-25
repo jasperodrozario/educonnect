@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { SidebarModified } from "@/app/_components/SidebarModified";
 import { AiChatButton } from "@/components/chat/AiChatButton";
+import { AuthProvider } from "@/app/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,13 @@ export default function RootLayout({ children, modal }) {
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarModified>
-            {children}
-            {modal}
-            <AiChatButton />
-          </SidebarModified>
+          <AuthProvider>
+            <SidebarModified>
+              {children}
+              {modal}
+              <AiChatButton />
+            </SidebarModified>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

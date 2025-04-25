@@ -125,7 +125,7 @@ export const SidebarLink = ({ link, className, ...props }) => {
       href={link.href}
       className={cn(
         `flex items-center justify-start gap-2 group/sidebar  py-3 ${
-          link.label === "John Doe"
+          link.label === "Mantaka"
             ? "pl-[0.8rem]"
             : "px-[0.65rem] mx-2 rounded-md"
         } hover:bg-orange-300 dark:hover:bg-orange-400`,

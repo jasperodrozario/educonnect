@@ -1,7 +1,7 @@
 "use client";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { loginWithEmailAndPassword } from "@/lib/firebaseConfig";
+import { loginWithEmailAndPassword } from "@/firebase/authService";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -9,34 +9,39 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [feedback, setFeedback] = useState("");
 
-  const handleLogin = async (email, password) => {
-    try {
-      await loginWithEmailAndPassword(email, password);
-      router.push("/");
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  const getFriendlyError = (code) => {
-    switch (code) {
-      case "auth/invalid-email":
-        return "Invalid email format";
-      case "auth/user-not-found":
-        return "No account found with this email";
-      case "auth/wrong-password":
-        return "Incorrect password";
-      case "auth/too-many-requests":
-        return "Too many attempts. Try again later or reset your password";
-      default:
-        return "Login failed. Please try again";
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setFeedback("Please fill in all fields");
+    } else {
+      const { user, error } = await loginWithEmailAndPassword(email, password);
+      if (user) {
+        alert("Successfully logged in!");
+        router.push("/");
+      } else if (error) {
+        switch (error.code) {
+          case "auth/invalid-email":
+            setFeedback("Invalid email format");
+          case "auth/user-not-found":
+            setFeedback("No account found with this email");
+          case "auth/wrong-password":
+            setFeedback("Incorrect password");
+          case "auth/too-many-requests":
+            setFeedback(
+              "Too many attempts. Try again later or reset your password"
+            );
+          default:
+            setFeedback("Login failed. Please try again");
+        }
+      }
     }
   };
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white rounded-lg p-2 w-full max-w-md dark:bg-neutral-900">
+      <div className="bg-white rounded-lg p-2 pb-6 w-full max-w-md dark:bg-neutral-900">
         <div className="mb-8 flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
@@ -47,8 +52,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold">Login</h1>
         </div>
         <form
-          action="/login"
-          method="post"
+          onSubmit={handleLogin}
           className="flex flex-col border p-6 rounded-lg shadow-md"
         >
           <label htmlFor="email" className="mb-2">
@@ -60,6 +64,7 @@ export default function LoginPage() {
             name="email"
             placeholder="Enter your email"
             required
+            onChange={(e) => setEmail(e.target.value)}
             className="bg-gray-200 dark:bg-gray-100 border rounded-lg py-2 px-4 w-full outline-none text-black"
           />
           <label htmlFor="password" className="mb-2 mt-4">
@@ -71,8 +76,10 @@ export default function LoginPage() {
             name="password"
             placeholder="Enter your password"
             required
+            onChange={(e) => setPassword(e.target.value)}
             className="bg-gray-200 dark:bg-gray-100 border rounded-lg py-2 px-4 w-full outline-none text-black"
           />
+          {feedback && <p className="mt-4 text-red-500">{feedback}</p>}
           <button
             type="submit"
             className="bg-orange-600 hover:bg-orange-700 font-bold py-2 px-4 rounded-lg my-6 w-full"
