@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { signUpWithEmailAndPassword } from "@/firebase/authService";
 import { useState } from "react";
 
-export const SignUpForm = () => {
+export const SignupForm = () => {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
