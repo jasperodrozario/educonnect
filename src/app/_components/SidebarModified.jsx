@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/Sidebar";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { useAuth } from "@/app/context/AuthContext";
 import { logout } from "@/firebase/authService";
@@ -21,6 +21,7 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export function SidebarModified({ children, animate = true }) {
+  const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -119,6 +120,8 @@ export function SidebarModified({ children, animate = true }) {
     onClick: () => {
       if (!logout()) {
         alert(error.code);
+      } else {
+        router.push("/");
       }
     },
   };

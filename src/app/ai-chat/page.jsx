@@ -255,7 +255,7 @@ export default function AiChatPage() {
         <div className="p-4 border-b border-neutral-200 dark:border-neutral-700">
           <Button
             onClick={handleNewChat}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white mb-2"
+            className="w-full bg-orange-400 hover:bg-orange-300 text-white mb-2"
           >
             New Chat
           </Button>

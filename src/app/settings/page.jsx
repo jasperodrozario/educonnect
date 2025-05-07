@@ -2,9 +2,16 @@
 import { useRouter } from "next/navigation";
 import { IconSettings, IconArrowLeft } from "@tabler/icons-react";
 import { DarkModeToggler } from "@/components/ui/DarkModeToggler";
+import { Button } from "@/components/ui/Button";
 
 export default function SettingsPage() {
   const router = useRouter();
+
+  // Handler for the "Login as Admin" button
+  const handleAdminLogin = async () => {
+    // Navigate to the admin route
+    window.location.href = "/admin";
+  };
 
   return (
     <div className="container max-w-full mx-auto px-4 py-8">
@@ -21,9 +28,15 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold">Settings</h1>
       </div>
 
-      <div className="flex justify-center items-center bg-white dark:bg-neutral-900 rounded-lg shadow-md p-6 border border-neutral-300 dark:border-neutral-700 overflow-scroll">
-        <h1 className="font-semibold pr-4">Toggle Dark Mode:</h1>
-        <DarkModeToggler />
+      <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-md p-6 border border-neutral-300 dark:border-neutral-700 overflow-scroll">
+        <div className="flex items-center gap-4">
+          <h1 className="font-semibold">Toggle Dark Mode:</h1>
+          <DarkModeToggler />
+        </div>
+        <div className="flex flex-col justify-center">
+          <h2 className="my-4 text-sm text-orange-300">Want special access?</h2>
+          <Button onClick={handleAdminLogin}>Login as Admin</Button>
+        </div>
       </div>
     </div>
   );

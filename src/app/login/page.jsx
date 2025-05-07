@@ -18,8 +18,7 @@ export default function LoginPage() {
     } else {
       const { user, error } = await loginWithEmailAndPassword(email, password);
       if (user) {
-        alert("Successfully logged in!");
-        router.push("/");
+        window.location.href = "/";
       } else if (error) {
         switch (error.code) {
           case "auth/invalid-email":
@@ -44,8 +43,8 @@ export default function LoginPage() {
       <div className="bg-white rounded-lg p-2 pb-6 w-full max-w-md dark:bg-neutral-900">
         <div className="mb-8 flex items-center gap-3">
           <button
-            onClick={() => router.push("/")}
-            className="h-10 w-10 rounded-full flex items-center justify-center hover:bg-neutral-300 hover:dark:bg-neutral-800"
+            onClick={() => router.back()}
+            className="h-10 w-10 rounded-full flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800"
           >
             <IconArrowLeft size={20} />
           </button>
@@ -82,7 +81,7 @@ export default function LoginPage() {
           {feedback && <p className="mt-4 text-red-500">{feedback}</p>}
           <button
             type="submit"
-            className="bg-orange-600 hover:bg-orange-700 font-bold py-2 px-4 rounded-lg my-6 w-full"
+            className="text-white font-bold py-2 px-4 rounded-lg my-6 w-full bg-orange-500 hover:bg-orange-400"
             onClick={handleLogin}
           >
             Login
@@ -90,7 +89,7 @@ export default function LoginPage() {
           <h2 className="text-center font-semibold">Or</h2>
           <button
             type="button"
-            className="bg-orange-600 hover:bg-orange-700 font-bold py-2 px-4 rounded-lg mt-6 mb-2 w-full"
+            className="text-white font-bold py-2 px-4 rounded-lg my-6 w-full bg-orange-500 hover:bg-orange-400"
             onClick={() => router.push("/signup")}
           >
             Sign up
