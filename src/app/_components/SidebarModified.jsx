@@ -7,13 +7,14 @@ import { useAuth } from "@/app/context/AuthContext";
 import { logout } from "@/firebase/authService";
 
 import {
-  IconBrandTabler,
+  IconDeviceDesktopAnalytics,
   IconSettings,
   IconUserBolt,
   IconLogin,
   IconLogout,
   IconHome,
   IconBrandGithubCopilot,
+  IconBooks,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -45,15 +46,43 @@ export function SidebarModified({ children, animate = true }) {
         <IconBrandGithubCopilot className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
+    {
+      label: "Settings",
+      href: "/settings",
+      icon: (
+        <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
   ];
 
   // Links that appear only when logged in
   const authenticatedLinks = [
     {
+      label: "Rooms",
+      href: "/",
+      icon: (
+        <IconHome className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
+      label: "AI Assistant",
+      href: "/ai-chat",
+      icon: (
+        <IconBrandGithubCopilot className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
+      label: "Resource Hub",
+      href: "/resources",
+      icon: (
+        <IconBooks className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
       label: "Dashboard",
       href: "/dashboard",
       icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconDeviceDesktopAnalytics className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {
@@ -96,8 +125,7 @@ export function SidebarModified({ children, animate = true }) {
 
   // Combine links based on authentication state
   const links = [
-    ...baseLinks,
-    ...(user ? authenticatedLinks : []),
+    ...(user ? authenticatedLinks : baseLinks),
     user ? logoutLink : loginLink,
   ];
 

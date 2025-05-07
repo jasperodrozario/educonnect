@@ -259,18 +259,6 @@ export default function AiChatPage() {
           >
             New Chat
           </Button>
-          <select
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="w-full mt-2 p-2 rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800"
-          >
-            <option value="All Subjects">All Subjects</option>
-            {SUBJECT_AREAS.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div className="flex-1 overflow-y-auto">

@@ -15,7 +15,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-full w-full rounded-tl-2xl bg-white  pb-6 overflow-scroll border dark:border-neutral-700 dark:bg-neutral-900">
+    <div className="h-full w-full rounded-tl-2xl bg-white pb-6 overflow-scroll border dark:border-neutral-700 dark:bg-neutral-900">
       <div className="flex sticky top-0 items-center justify-between mb-4 pb-4 pt-8 px-8 z-10 bg-white dark:bg-neutral-900">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
           Study Rooms
