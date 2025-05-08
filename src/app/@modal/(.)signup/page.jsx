@@ -1,10 +1,10 @@
 import Modal from "@/components/ui/Modal";
-import SignUpPage from "@/app/signup/page";
+import SignupPage from "@/app/signup/page";
 
 export default function SignupModal() {
   return (
     <Modal>
-      <SignUpPage />
+      <SignupPage />
     </Modal>
   );
 }
